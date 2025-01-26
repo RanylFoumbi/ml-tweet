@@ -3,7 +3,8 @@ from mysql.connector import Error
 import os
 import pandas as pd
 
-from models.tweet import Tweet
+from app.models.tweet import Tweet
+
 
 class DatabaseService:
     def __init__(self):
