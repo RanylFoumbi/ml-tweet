@@ -3,12 +3,14 @@ from mysql.connector import Error
 import os
 import pandas as pd
 
-class DatabaseManager:
+from models.tweet import Tweet
+
+class DatabaseService:
     def __init__(self):
-        self.host = 'localhost:4000'
+        self.host = 'localhost'
         self.database = os.getenv('DB_NAME')
         self.user = os.getenv('DB_USER')
-        self.password = os.getenv('DB_PASSWORD')
+        self.password = ''
 
     def connect(self):
         try:
@@ -24,7 +26,8 @@ class DatabaseManager:
             print(f"Erreur de connexion : {e}")
             return None
 
-    def insert_tweet(self, text, positive, negative):
+    def insert_tweet(self, tweet: Tweet):
+        print(f"Insertion du tweet {tweet.text}")
         query = """
         INSERT INTO tweets (text, positive, negative) 
         VALUES (%s, %s, %s)
@@ -32,7 +35,8 @@ class DatabaseManager:
         try:
             connection = self.connect()
             cursor = connection.cursor()
-            cursor.execute(query, (text, positive, negative))
+            values = (tweet.text, tweet.positive, tweet.negative)
+            cursor.execute(query, values)
             connection.commit()
         except Error as e:
             print(f"Erreur d'insertion : {e}")
