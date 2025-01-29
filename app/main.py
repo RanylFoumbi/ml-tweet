@@ -1,6 +1,7 @@
 import signal
 import sys
 from flask import Flask, request, jsonify
+from init_db import initialize_database
 from controllers.tweet import TweetController
 from train_model_once import train_model_once
 from services.scheduler import Scheduler
@@ -40,6 +41,8 @@ def graceful_shutdown(_, __):
     
 if __name__ == "__main__":
     try:
+        initialize_database()
+
         train_model_once()
 
         scheduler_thread = threading.Thread(target=scheduler.start_scheduler)

@@ -1,10 +1,5 @@
 
 from services.model import ModelBuilder
-from models.tweet import Tweet
-
-from services.database import DatabaseService
-
-
 class TweetController:
     def __init__(self):
        pass

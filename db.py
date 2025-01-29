@@ -1,1 +1,0 @@
-# Dump command: mysqldump -u [USERNAME] -p [DATABASE_NAME] > [dumpfile.sql]

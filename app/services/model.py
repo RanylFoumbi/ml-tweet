@@ -58,7 +58,6 @@ class ModelBuilder:
         
         prob_positive = model_positive.predict_proba(X)[0][1]
         prob_negative = model_negative.predict_proba(X)[0][1]
-        
         self.database_service.insert_tweet(Tweet(
             text=tweet,
             positive= 1 if prob_negative < prob_positive else 0,
