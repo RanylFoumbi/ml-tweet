@@ -3,7 +3,7 @@ from mysql.connector import Error
 import os
 import pandas as pd
 
-from app.models.tweet import Tweet
+from models.tweet import Tweet
 
 
 class DatabaseService:
@@ -11,7 +11,7 @@ class DatabaseService:
         self.host = 'localhost'
         self.database = os.getenv('DB_NAME')
         self.user = os.getenv('DB_USER')
-        self.password = ''
+        self.password = 'machine_learning123'
 
     def connect(self):
         try:

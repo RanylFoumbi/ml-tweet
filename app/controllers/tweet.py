@@ -1,18 +1,19 @@
 
-from app.models.tweet import Tweet
+from services.model import ModelBuilder
+from models.tweet import Tweet
 
-from app.services.database import DatabaseService
+from services.database import DatabaseService
 
 
 class TweetController:
     def __init__(self):
-        self.database_service = DatabaseService()
+       pass
 
-    def insert_tweet(self, tweets):
-            if isinstance(tweets, list):
-                for tweet in tweets:
-                    data = Tweet.model_validate(tweet)
-                    self.database_service.insert_tweet(data)
-
-    def read_training_data(self):   
-        return self.database_service.read_training_data()
+    def predict_sentiment(self, tweets):
+        model = ModelBuilder()
+        results = {}
+        if isinstance(tweets, list):
+            for index, tweet in enumerate(tweets):
+                result = model.predict_sentiment(tweet)
+                results[f"tweet{index}"] = result
+        return results
