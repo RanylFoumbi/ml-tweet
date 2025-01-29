@@ -10,5 +10,5 @@ class TweetController:
         if isinstance(tweets, list):
             for index, tweet in enumerate(tweets):
                 result = model.predict_sentiment(tweet)
-                results[f"tweet{index}"] = result
+                results[f"tweet{index + 1}"] = result
         return results
