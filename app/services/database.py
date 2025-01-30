@@ -37,7 +37,7 @@ class DatabaseService:
         try:
             with self.engine.connect() as conn:
                 conn.execute(text("CREATE DATABASE IF NOT EXISTS machine_learning"))
-                conn.execute(text("USE machine_learning"))
+                conn.execute(text(f"USE {self.database}"))
                 
                 create_table_query = text("""
                 CREATE TABLE IF NOT EXISTS tweets (
@@ -104,11 +104,10 @@ class DatabaseService:
     def read_training_data(self):
         query = "SELECT text, positive, negative FROM tweets"
         try:
-            connection = self.connect()
-            df = pd.read_sql(query, connection)
-            return df
+            with self.engine.connect() as conn:
+                conn.execute(text(f"USE {self.database}"))
+                df = pd.read_sql(query, conn)
+                conn.commit()
+                return df
         except Error as e:
             print(f"Erreur de chargement : {e}")
-        finally:
-            if connection.is_connected():
-                connection.close()

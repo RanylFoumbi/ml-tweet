@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from train_model_once import train_model_once
 from controllers.tweet import TweetController
 from services.scheduler import Scheduler
 import logging
@@ -25,6 +26,7 @@ def predict():
     
 if __name__ == "__main__":
     try:
+        train_model_once()
         app.run(host='0.0.0.0', port=5000)
     except Exception as e:
         logger.error(f"Failed to start the application: {e}")
