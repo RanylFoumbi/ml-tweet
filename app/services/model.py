@@ -1,3 +1,4 @@
+import logging
 import re
 import os
 import pandas as pd
@@ -7,6 +8,9 @@ import pickle
 
 from services.database import DatabaseService
 from models.tweet import Tweet
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ModelBuilder:
     
@@ -27,43 +31,58 @@ class ModelBuilder:
         y_positive = data['positive'].values
         y_negative = data['negative'].values
         
-        model_positive = LogisticRegression(penalty=None, solver='newton-cg')
-        model_positive.fit(X, y_positive)
+        positive_model = LogisticRegression(penalty=None, solver='newton-cg')
+        positive_model.fit(X, y_positive)
         
-        model_negative = LogisticRegression(penalty=None, solver='newton-cg')
-        model_negative.fit(X, y_negative)
+        negative_model = LogisticRegression(penalty=None, solver='newton-cg')
+        negative_model.fit(X, y_negative)
         
         os.makedirs('trained_models', exist_ok=True)
         
         with open('trained_models/logistic_model_positive.pkl', 'wb') as model_file:
-            pickle.dump(model_positive, model_file)
+            pickle.dump(positive_model, model_file)
         with open('trained_models/logistic_model_negative.pkl', 'wb') as model_file:
-            pickle.dump(model_negative, model_file)
+            pickle.dump(negative_model, model_file)
         with open('trained_models/vectorizer.pkl', 'wb') as vectorizer_file:
             pickle.dump(vectorizer, vectorizer_file)
+        
+        logger.info("Model trained and saved successfully.")
             
     def load_models(self):
         with open('trained_models/logistic_model_positive.pkl', 'rb') as model_file:
-            model_positive = pickle.load(model_file)
+            positive_model = pickle.load(model_file)
         with open('trained_models/logistic_model_negative.pkl', 'rb') as model_file:
-            model_negative = pickle.load(model_file)
+            negative_model = pickle.load(model_file)
         with open('trained_models/vectorizer.pkl', 'rb') as vectorizer_file:
             vectorizer = pickle.load(vectorizer_file)
-        return model_positive, model_negative, vectorizer
+        return positive_model, negative_model, vectorizer
 
-    def predict_sentiment(self, tweet: str):
-        model_positive, model_negative, vectorizer = self.load_models()
-        cleaned_tweet = self.clean_text(tweet)
-        X = vectorizer.transform([cleaned_tweet])
+    def predict_sentiment(self, tweets: list):
+        positive_model, negative_model, vectorizer = self.load_models()
+        cleaned_tweets = [self.clean_text(tweet) for tweet in tweets]
+        X = vectorizer.transform(cleaned_tweets)
         
-        prob_positive = model_positive.predict_proba(X)[0][1]
-        prob_negative = model_negative.predict_proba(X)[0][1]
+        prob_positive = positive_model.predict_proba(X)
+        prob_negative = negative_model.predict_proba(X)
         
-        self.database_service.insert_tweet(Tweet(
-            text=tweet,
-            positive= 1 if prob_negative < prob_positive else 0,
-            negative= 1 if prob_negative > prob_positive else 0
+        results = {}
+        for idx, tweet in enumerate(tweets):
+            positive_percentage = (prob_positive[idx][1] + prob_negative[idx][0]) / 2
+            negative_percentage = (prob_negative[idx][1] + prob_positive[idx][0]) / 2
+            
+            if positive_percentage > negative_percentage:
+                results[f"tweet{idx + 1}"] = round(positive_percentage, 1)
+                self.insert_tweet(tweet, 1, 0)
+            else:
+                results[f"tweet{idx + 1}"] = round(negative_percentage * -1, 1)
+                self.insert_tweet(tweet, 0, 1)
+        
+        return results
+    
+    def insert_tweet(self, text: str, positive: int, negative: int):
+        self.database_service.insert_tweet(
+            Tweet(
+            text=text,
+            positive= positive,
+            negative= negative
         ))
-        
-        avg_probability = (prob_positive + prob_negative) / 2
-        return avg_probability

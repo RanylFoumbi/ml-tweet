@@ -15,6 +15,8 @@ class DatabaseService:
         self.database = os.getenv('DB_NAME')
         self.user = os.getenv('DB_USER')
         self.password = os.getenv('DB_PASSWORD')
+        self.engine = create_engine(f"mysql+mysqlconnector://{self.user}:{self.password}@localhost/")
+
 
     def connect(self):
         try:
@@ -32,9 +34,8 @@ class DatabaseService:
     
     def create_database(self):
 
-        engine = create_engine(f"mysql+mysqlconnector://{self.user}:{self.password}@localhost/")
         try:
-            with engine.connect() as conn:
+            with self.engine.connect() as conn:
                 conn.execute(text("CREATE DATABASE IF NOT EXISTS machine_learning"))
                 conn.execute(text("USE machine_learning"))
                 

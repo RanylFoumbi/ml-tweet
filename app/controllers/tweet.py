@@ -6,9 +6,7 @@ class TweetController:
 
     def predict_sentiment(self, tweets):
         model = ModelBuilder()
-        results = {}
-        if isinstance(tweets, list):
-            for index, tweet in enumerate(tweets):
-                result = model.predict_sentiment(tweet)
-                results[f"tweet{index + 1}"] = result
-        return results
+        if isinstance(tweets, list) and all(isinstance(tweet, str) for tweet in tweets):
+            return model.predict_sentiment(tweets)
+        else:
+            raise ValueError("The tweet should be a list of string")
