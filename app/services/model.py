@@ -73,9 +73,12 @@ class ModelBuilder:
             if positive_percentage > negative_percentage:
                 results[f"tweet{idx + 1}"] = round(positive_percentage, 1)
                 self.insert_tweet(tweet, 1, 0)
-            else:
+            elif positive_percentage < negative_percentage:
                 results[f"tweet{idx + 1}"] = round(negative_percentage * -1, 1)
                 self.insert_tweet(tweet, 0, 1)
+            else:
+                results[f"tweet{idx + 1}"] = 0.0
+                self.insert_tweet(tweet, 0, 0)
         
         return results
     
