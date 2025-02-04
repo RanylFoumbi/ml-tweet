@@ -8,9 +8,8 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     healthcheck:
         test: ["CMD", "mysqladmin" ,"ping", "-h", "${DOCKER_PROJECT_NAME}_db"]
         timeout: 10s

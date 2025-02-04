@@ -7,4 +7,3 @@ def train_model_once():
     data = db_service.read_training_data()
     model_builder = ModelBuilder()
     model_builder.train_model(data)
-    print("Model trained and saved successfully.")
