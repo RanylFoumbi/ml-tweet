@@ -55,7 +55,6 @@ def get_confusion_matrix():
     cm_negative = confusion_matrix(y_test_negative, y_pred_negative)
     
     logger.info("Positive confusion matrix")
-    print(cm_positive)
     print(tabulate(cm_positive, headers='keys', tablefmt='psql'))
 
     logger.info("Negative confusion matrix")

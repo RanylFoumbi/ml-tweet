@@ -3,4 +3,3 @@
 environment
 **/__pycache__
 app/*.pyc
-trained_models

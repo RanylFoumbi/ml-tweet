@@ -31,3 +31,5 @@ Pour exécuter le projet, il vous suffit de suivre les étapes suivantes :
 
 ## ➕ NB:
 Nous avons inclus dans le projet un Dockerfile que vous pouvez exploiter si vous ne désirez pas installer MySQL et que vous disposez de Docker sur votre ordinateur.
+
+Le fichier contenant le rapport d'évaluation est le suivant `Rapport d'évaluation.pdf`
