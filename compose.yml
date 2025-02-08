@@ -16,9 +16,9 @@ services:
         retries: 10
     restart: always
     ports:
-      - 3306:3306
+      - ${MYSQL_PORT}:3306
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:${PHPMYADMIN_VERSION}
+    image: phpmyadmin/phpmyadmin:latest
     container_name: ${DOCKER_PROJECT_NAME}_phpmyadmin
     env_file: .env
     networks:

@@ -114,11 +114,12 @@ class DatabaseService:
     ]
     
     def __init__(self):
-        self.host = 'localhost'
+        self.host = os.getenv('MYSQL_HOST')
+        self.port = os.getenv('MYSQL_PORT')
         self.database = os.getenv('DB_NAME')
         self.user = os.getenv('DB_USER')
         self.password = os.getenv('DB_PASSWORD')
-        self.engine = create_engine(f"mysql+mysqlconnector://{self.user}:{self.password}@localhost/")
+        self.engine = create_engine(f"mysql+mysqlconnector://{self.user}:{self.password}@{self.host}:{self.port}/")
 
 
     def connect(self):
@@ -126,9 +127,10 @@ class DatabaseService:
             print(f"Connexion à la base de données {self.host}")
             connection = mysql.connector.connect(
                 host=self.host,
+                port=self.port,
                 database=self.database,
                 user=self.user,
-                password=self.password
+                password=self.password,
             )
             return connection
         except Error as e:
