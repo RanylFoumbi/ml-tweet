@@ -83,18 +83,20 @@ class DatabaseService:
             logging.info(f"Error creating database: {e}")
 
     def insert_first_data(self):
-        values_str = ', '.join([f"('{text.replace("'", "''")}', {positive}, {negative})" for text, positive, negative in self.insertions])
-        query = f"""
-        INSERT INTO tweets (text, positive, negative) VALUES
-            {values_str};
-        """
         try:
             with self.engine.begin() as conn:
                 conn.execute(text(f"USE {self.database}"))
-                conn.execute(text(query))
+                insert_stmt = text("""
+                    INSERT INTO tweets (text, positive, negative) 
+                    VALUES (:text, :positive, :negative)
+                """)
+                conn.execute(insert_stmt, [
+                    {"text": t, "positive": p, "negative": n} 
+                    for t, p, n in self.insertions
+                ])
             logging.info("Database initialized successfully!")
         except Exception as e:
-            logging.info(f"Error inserting data: {e}")
+            logging.error(f"Error inserting data: {e}")
     
     def insert_tweet(self, tweet: Tweet):
         print(f"Inserting tweet: {tweet.text}")
