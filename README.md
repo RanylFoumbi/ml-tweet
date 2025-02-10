@@ -20,6 +20,8 @@ Le projet comprend :
 ### Étapes d'exécution
 Pour exécuter le projet, il vous suffit de suivre les étapes suivantes :
 - Cloner le projet via le lien `https://github.com/RanylFoumbi/ml-tweet.git`
+- Créer un environnement virtuel à la racine du projet `python -m venv .venv`
+- Activer l'environnement virtuel `./.venv/Scripts/Activate.ps1`
 - Modifier le fichier `.env` à la racine du projet pour l'adapter à votre environnement d'exécution. Si vous utilisez MySQL avec sa configuration par défaut, vous n'aurez probablement pas besoin de modifier ce fichier.
 - Installer tous les modules Python se trouvant dans le fichier `requirements.txt` à l'aide de la commande `pip install -r requirements.txt`
 - Une fois le service MySQL en cours d'exécution, exécutez le script `init_db.py` pour l'initialisation de la base de données

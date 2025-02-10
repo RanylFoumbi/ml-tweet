@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 import mysql.connector
 from mysql.connector import Error
 import os
@@ -7,6 +8,8 @@ from models.tweet import Tweet
 from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 
+
+load_dotenv()
 Base = declarative_base()
 
 class DatabaseService:
