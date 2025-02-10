@@ -29,7 +29,10 @@ Pour exécuter le projet, il vous suffit de suivre les étapes suivantes :
 - Pour planifier le réentraînement, exécutez le script `run_cronjob.py` et le modèle sera réentraîné chaque semaine à l'heure d'exécution du script
 - Pour lancer les tests et afficher les matrices de confusion, exécutez le script `print_confusion_matrix.py`
  
-![Exemple d'exécution](assets/image.png)
+<div style="display: flex; justify-content: space-around;">
+    <img src="assets/image.png" alt="Exemple d'exécution" style="width: 47%;">
+    <img src="assets/image2.png" alt="Deuxième exemple d'exécution" style="width: 47%;">
+</div>
 
 ## ➕ NB:
 Nous avons inclus dans le projet un Dockerfile que vous pouvez exploiter si vous ne désirez pas installer MySQL et que vous disposez de Docker sur votre ordinateur.
